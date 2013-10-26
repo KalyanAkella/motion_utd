@@ -1,4 +1,4 @@
-function example_gestures() {
+function button_gestures() {
 
     function init() {
         $('body').append(
