@@ -11,6 +11,18 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
     contextSource.translate(canvasSource.width, 0);
     contextSource.scale(-1, 1);
 
+    var up_callback = function() { console.log("up"); };
+    var down_callback = function() { console.log("down"); };
+    var left_callback = function() { console.log("left"); };
+    var right_callback = function() { console.log("right"); };
+
+    this.addCallbacks = function(up, down, left, right){
+        up_callback = up;
+        down_callback = down;
+        left_callback = left;
+        right_callback = right;
+    }
+
     this.start = function () {
         function drawVideo() {
             contextSource.drawImage(video, 0, 0, video.width, video.height);
@@ -95,17 +107,17 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
 
                 if (fastAbs(topDiff) > noiseThreshold || fastAbs(bottomDiff) > noiseThreshold) {
                     if (topDiff > 0 && bottomDiff < 0) {
-                        console.log("scrolling up");
+                        up_callback();
                     } else if (topDiff < 0 && bottomDiff > 0) {
-                        console.log("scrolling down");
+                        down_callback();
                     }
                 }
 
                 if (fastAbs(leftDiff) > noiseThreshold || fastAbs(rightDiff) > noiseThreshold) {
                     if (leftDiff > 0 && rightDiff < 0) {
-                        console.log("scrolling left");
+                        left_callback();
                     } else if (leftDiff < 0 && rightDiff > 0) {
-                        console.log("scrolling right");
+                        right_callback();
                     }
                 }
             }
