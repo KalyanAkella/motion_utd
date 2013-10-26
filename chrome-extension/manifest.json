@@ -12,9 +12,8 @@
         "default_popup": "popup/index.html"
     },
     "content_scripts": [
-    {
-        "js": ["lib/jquery-2.0.3.min.js"]
-    }
-],
-..
+        {
+            "js": ["lib/jquery-2.0.3.min.js"]
+        }
+    ]
 }
