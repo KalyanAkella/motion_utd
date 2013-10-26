@@ -1,0 +1,30 @@
+#motion-example-gestures {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 150px;
+    height: 100px;
+    padding: 10px;
+    border: solid 1px black;
+    background-color: White;
+    z-index: 999999999;
+}
+
+#motion-gestures {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    width: 220px;
+    height: 420px;
+    padding: 10px;
+    border: solid 1px black;
+    background-color: White;
+    z-index: 999999999;
+}
+
+button {
+    width: 40%;
+    height: 30px;
+    float: left;
+    margin: 5px;
+}

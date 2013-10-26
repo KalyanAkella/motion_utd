@@ -25,12 +25,28 @@
         "webRequest",
         "webRequestBlocking",
         "http://*/*",
-        "https://*/*",
-        "audioCapture",
-        "videoCapture"
-],
+        "https://*/*"
+    ],
     "browser_action": {
-        "default_icon": "popup/icon.png",
-        "default_popup": "popup/index.html"
-    }
+        "default_icon": "popup/icon.png"
+    },
+    "web_accessible_resources":[
+        "lib/jquery-2.0.3.min.js",
+        "lib/jquery-2.0.3.min.map"
+    ],
+    "content_scripts": [{
+        "matches": [ "http://*/*", "https://*/*"],
+        "js": [
+            "lib/jquery-2.0.3.min.js",
+            "popup/extension.js",
+            "effects/control_browser.js",
+            "detection/motion_gestures.js",
+            "detection/example_gestures.js",
+            "detection/motion_system.js"
+        ],
+        "css": [
+            "css/styling.css"
+        ]
+    }]
+
 }
