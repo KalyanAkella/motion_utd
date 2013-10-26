@@ -7,8 +7,13 @@ function button_gestures() {
                 '<button id="down">Down</button>' +
                 '<button id="back">Back</button>' +
                 '<button id="forward">Forward</button>' +
-            '</div>'
+                '<button id="hide-motion-example">Hide</button>' +
+
+      '</div>'
         );
+      $('#hide-motion-example').click(function(){
+        $('#motion-example-gestures').hide();
+      });
     }
 
     function left(callback) {

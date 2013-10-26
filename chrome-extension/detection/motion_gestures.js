@@ -28,9 +28,12 @@ function motion_gestures() {
                 '<video id="webcam" autoplay width="640" height="480" style="display:none;"></video>' +
                 '<canvas id="canvas-source" width="640" height="480" style="display:none;"></canvas>' +
                 '<canvas id="canvas-blended" width="200" height="400"></canvas>' +
+                '<button id="hide-motion-gestures">Hide</button>' +
             '</div>'
         );
-
+      $('#hide-motion-gestures').click(function(){
+        $('#motion-gestures').hide();
+      });
         var video = $('#webcam')[0];
         if (navigator.getUserMedia) {
             navigator.getUserMedia({audio: false, video: true}, function(stream) {
