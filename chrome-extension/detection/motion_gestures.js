@@ -2,7 +2,6 @@ function motion_gestures() {
 
     var motionSystem;
 
-
     function left(callback) {
         motionSystem.leftCallbacks(callback);
     }

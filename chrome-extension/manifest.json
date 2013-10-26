@@ -38,7 +38,7 @@
         "matches": [ "http://*/*", "https://*/*"],
         "js": [
             "lib/jquery-2.0.3.min.js",
-            "popup/extension.js",
+            "popup/broker.js",
             "effects/control_browser.js",
             "detection/motion_gestures.js",
             "detection/example_gestures.js",

@@ -1,10 +1,6 @@
-function extension(browser) {
+function broker(browser) {
 
-    function init() {
-
-    }
-
-    function addPublisher(publisher){
+    function add_publisher(publisher){
         publisher.init();
 
         publisher.up(browser.scroll_up);
@@ -13,25 +9,20 @@ function extension(browser) {
         publisher.right(browser.forward);
     }
 
-
     return {
-        init: init,
-        addPublisher: addPublisher
+        init: function() {},
+        add_publisher: add_publisher
     };
 }
 
 $(function(){
-    var browser = control_browser();
-
     var example = example_gestures();
     var motion = motion_gestures();
 
-    var thing = extension(browser);
+    var event_broker = broker(control_browser());
 
-    thing.addPublisher(example)
-    thing.addPublisher(motion)
+    event_broker.add_publisher(example)
+    event_broker.add_publisher(motion)
 
-    thing.init();
-
-
+    event_broker.init();
 });
