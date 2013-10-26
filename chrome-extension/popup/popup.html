@@ -4,24 +4,20 @@
     <title>Motion United</title>
     <style>
         body {
-            min-width: 357px;
-            overflow-x: hidden;
-        }
-
-        img {
-            margin: 5px;
-            border: 2px solid black;
-            vertical-align: middle;
-            width: 75px;
-            height: 75px;
+            min-width: 640px;
+            min-height: 480px;
+            overflow: hidden;
         }
     </style>
+
     <!-- Extension JavaScript -->
+    <script src="jquery-2.0.3.min.js"></script>
     <script src="popup.js"></script>
+
     <!-- Detection JavaScript -->
     <script src="../detection/gestures.js"></script>
 </head>
 <body>
-
+    <video id="webcam" autoplay width="640" height="480"></video>
 </body>
 </html>
