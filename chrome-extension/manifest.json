@@ -23,15 +23,12 @@
         "topSites",
         "webNavigation",
         "webRequest",
-        "webRequestBlocking"
+        "webRequestBlocking",
+        "audioCapture",
+        "videoCapture"
 ],
     "browser_action": {
         "default_icon": "popup/icon.png",
         "default_popup": "popup/index.html"
-    },
-    "content_scripts": [
-        {
-            "js": ["lib/jquery-2.0.3.min.js"]
-        }
-    ]
+    }
 }
