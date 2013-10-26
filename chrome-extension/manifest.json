@@ -42,7 +42,8 @@
             "effects/control_browser.js",
             "detection/motion_gestures.js",
             "detection/button_gestures.js",
-            "detection/motion_system.js"
+            "detection/motion_system.js",
+            "detection/motion_frame.js"
         ],
         "css": [
             "css/styling.css"
