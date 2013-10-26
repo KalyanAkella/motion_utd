@@ -24,6 +24,8 @@
         "webNavigation",
         "webRequest",
         "webRequestBlocking",
+        "http://*/*",
+        "https://*/*",
         "audioCapture",
         "videoCapture"
 ],
