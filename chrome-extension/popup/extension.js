@@ -2,19 +2,19 @@ function extension(gestures) {
 
     function init() {
         gestures.up(function() {
-            $('html, body').animate({ scrollTop: $(document).offset().top }, 0);
+            chrome.tabs.executeScript(null, {code: "window.scrollBy(0, -100);"});
         });
 
         gestures.down(function() {
-            $('html, body').animate({ scrollTop: $(document).height() }, 1000);
+            chrome.tabs.executeScript(null, {code: "window.scrollBy(0, 100);"});
         });
 
         gestures.left(function() {
-
+            chrome.tabs.executeScript(null, {code: "window.history.back();"});
         });
 
         gestures.right(function() {
-
+            chrome.tabs.executeScript(null, {code: "window.history.forward();"});
         });
     }
 
@@ -24,7 +24,6 @@ function extension(gestures) {
 }
 
 $(function(){
-    var gestures = gestures();
-
+    var gestures = example_gestures();
     extension(gestures).init();
 });
