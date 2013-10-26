@@ -1,0 +1,25 @@
+<project name="street-view">
+    <property environment="env"/>
+    <property name="apache.public.dir" value="${env.APACHE_PUBLIC_DIR}"/>
+    <property name="www.dir" value="www"/>
+    <property name="motion.js.dir" value="../chrome-extension/detection"/>
+    <property name="lib.js.dir" value="../chrome-extension/lib"/>
+
+  <target name="clean">
+    <delete includeemptydirs="true">
+      <fileset dir="${apache.public.dir}" erroronmissingdir="false" includes="**/*"/>
+    </delete>
+  </target>
+
+  <target name="deploy" depends="clean">
+    <copy todir="${apache.public.dir}" overwrite="true">
+      <fileset dir="${www.dir}" includes="**/*"/>
+    </copy>
+    <copy todir="${apache.public.dir}/js" overwrite="true">
+      <fileset dir="${motion.js.dir}" includes="**/*"/>
+    </copy>
+    <copy todir="${apache.public.dir}/js" overwrite="true">
+      <fileset dir="${lib.js.dir}" includes="**/*"/>
+    </copy>
+  </target>
+</project>
