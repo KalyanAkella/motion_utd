@@ -5,7 +5,7 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
   var contextSource = canvasSource.getContext('2d');
   var contextBlended = canvasBlended.getContext('2d');
   var lastImageData = null;
-  var prevTopWhiteArea, prevBottomWhiteArea;
+  var prevTopWhiteArea, prevBottomWhiteArea, prevLeftWhiteArea, prevRightWhiteArea;
   contextSource.translate(canvasSource.width, 0);
   contextSource.scale(-1, 1);
 
@@ -70,27 +70,40 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
     function checkAreas() {
       var width = canvasBlended.width;
       var height = canvasBlended.height;
-      var currentTopWhiteArea = calcWhiteArea(0, 0 , canvasBlended.width, canvasBlended.height / 2);
-      var currentBottomWhiteArea = calcWhiteArea(0, height / 2, width, height / 2);
 
-      if (prevTopWhiteArea == null || prevBottomWhiteArea == null) {
-        prevTopWhiteArea = currentTopWhiteArea;
-        prevBottomWhiteArea = currentBottomWhiteArea;
+      var currLeftWhiteArea = calcWhiteArea(0, 0, width / 2, height);
+      var currRightWhiteArea = calcWhiteArea(width / 2, 0, width / 2, height);
+      var currTopWhiteArea = calcWhiteArea(0, 0, width, height / 2);
+      var currBottomWhiteArea = calcWhiteArea(0, height / 2, width, height / 2);
+
+      if (prevTopWhiteArea == null) {
+        prevTopWhiteArea = currTopWhiteArea;
+        prevBottomWhiteArea = currBottomWhiteArea;
+        prevLeftWhiteArea = currLeftWhiteArea;
+        prevRightWhiteArea = currRightWhiteArea;
         console.log("no history");
       } else {
-        topDiff = currentTopWhiteArea - prevTopWhiteArea ;
-        bottomDiff = currentBottomWhiteArea - prevBottomWhiteArea;
+        topDiff = currTopWhiteArea - prevTopWhiteArea ;
+        bottomDiff = currBottomWhiteArea - prevBottomWhiteArea;
+        leftDiff = currLeftWhiteArea - prevLeftWhiteArea;
+        rightDiff = currRightWhiteArea - prevRightWhiteArea;
 
         if (topDiff > 0 && bottomDiff < 0 ) {
           console.log("scrolling up");
-        }else
-        if (topDiff < 0 && bottomDiff > 0) {
+        } else if (topDiff < 0 && bottomDiff > 0) {
           console.log("scrolling down");
         }
 
+        if (leftDiff > 0 && rightDiff < 0) {
+          console.log("scrolling left");
+        } else if (leftDiff < 0 && rightDiff > 0) {
+          console.log("scrolling right");
+        }
       }
-      prevTopWhiteArea = currentTopWhiteArea;
-      prevBottomWhiteArea = currentBottomWhiteArea;
+      prevTopWhiteArea = currTopWhiteArea;
+      prevBottomWhiteArea = currBottomWhiteArea;
+      prevLeftWhiteArea = currLeftWhiteArea;
+      prevRightWhiteArea = currRightWhiteArea;
     }
 
     function update() {
