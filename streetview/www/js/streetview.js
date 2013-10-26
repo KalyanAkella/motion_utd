@@ -1,8 +1,7 @@
 function control_streetview() {
-
     var map;
     var panorama;
-    var astorPlace = new google.maps.LatLng(40.729884, -73.990988);
+    var astorPlace = new google.maps.LatLng(53.47655127448954, -2.254521449859567);
 
     var ANGLE = 10;
 
@@ -44,8 +43,8 @@ function control_streetview() {
       panorama = map.getStreetView();
       panorama.setPosition(astorPlace);
       panorama.setPov(/** @type {google.maps.StreetViewPov} */({
-        heading: 265,
-        pitch: 0
+        heading: 280,
+        pitch: 10
       }));
       panorama.setVisible(true);
     }
