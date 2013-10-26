@@ -1,0 +1,18 @@
+<project name="gestures">
+    <property environment="env"/>
+    <property name="apache.public.dir" value="${env.APACHE_PUBLIC_DIR}"/>
+    <property name="www.dir" value="www"/>
+
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset dir="${apache.public.dir}" erroronmissingdir="false" includes="**/*"/>
+		</delete>
+	</target>
+
+	<target name="deploy" depends="clean">
+		<copy todir="${apache.public.dir}" overwrite="true">
+			<fileset dir="${www.dir}" includes="**/*"/>
+		</copy>
+	</target>
+</project>
+
