@@ -7,17 +7,19 @@
     padding: 10px;
     border: solid 1px black;
     background-color: White;
+    z-index: 999999999;
 }
 
 #motion-gestures {
     position: fixed;
     top: 0px;
     right: 0px;
-    width: 300px;
-    height: 300px;
+    width: 220px;
+    height: 420px;
     padding: 10px;
     border: solid 1px black;
     background-color: White;
+    z-index: 999999999;
 }
 
 button {

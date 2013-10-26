@@ -5,7 +5,9 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
     var contextSource = canvasSource.getContext('2d');
     var contextBlended = canvasBlended.getContext('2d');
     var lastImageData = null;
-    var prevTopWhiteArea, prevBottomWhiteArea;
+    var prevTopWhiteArea, prevBottomWhiteArea, prevLeftWhiteArea, prevRightWhiteArea;
+    var samplingFactor = 6;
+    var noiseThreshold = 1000;
     contextSource.translate(canvasSource.width, 0);
     contextSource.scale(-1, 1);
 
@@ -17,15 +19,18 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
         function blend() {
             var width = canvasSource.width;
             var height = canvasSource.height;
-            var sourceData = contextSource.getImageData(width - 200, height - 200, 200, 200);
-            if (!lastImageData) lastImageData = contextSource.getImageData(width - 200, height - 200, 200, 200);
-            var blendedData = contextSource.createImageData(200, 200);
+            var sourceData = contextSource.getImageData(width - 200, 0, 200, 480);
+            if (!lastImageData) lastImageData = contextSource.getImageData(width - 200, 0, 200, 480);
+            var blendedData = contextSource.createImageData(200, 480);
             differenceAccuracy(blendedData.data, sourceData.data, lastImageData.data);
             contextBlended.putImageData(blendedData, 0, 0);
             lastImageData = sourceData;
 
-            //contextBlended.strokeStyle = "#FF0000";
-            //contextBlended.strokeRect(width - 200, height - 200, 200, 200);
+            contextBlended.strokeStyle = "#FF0000";
+            contextBlended.beginPath();
+            contextBlended.moveTo(0, 200);
+            contextBlended.lineTo(200, 200);
+            contextBlended.stroke();
         }
 
         function fastAbs(value) {
@@ -63,41 +68,58 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
         }
 
         function calcWhiteArea(x, y, width, height) {
-            var topBlended = contextBlended.getImageData(x, y, width, height );
-            return computeWhiteArea(topBlended.data);
+            var blendedImage = contextBlended.getImageData(x, y, width, height);
+            return computeWhiteArea(blendedImage.data);
         }
 
         function checkAreas() {
             var width = canvasBlended.width;
             var height = canvasBlended.height;
-            var currentTopWhiteArea = calcWhiteArea(0, 0 , canvasBlended.width, canvasBlended.height / 2);
-            var currentBottomWhiteArea = calcWhiteArea(0, height / 2, width, height / 2);
 
-            if (prevTopWhiteArea == null || prevBottomWhiteArea == null) {
-                prevTopWhiteArea = currentTopWhiteArea;
-                prevBottomWhiteArea = currentBottomWhiteArea;
+            var currTopWhiteArea = calcWhiteArea(0, 0, width, height / 4);
+            var currBottomWhiteArea = calcWhiteArea(0, height / 4, width, height / 4);
+            var currLeftWhiteArea = calcWhiteArea(0, height / 2, width / 2, height / 2);
+            var currRightWhiteArea = calcWhiteArea(width / 2, height / 2, width / 2, height / 2);
+
+            if (prevTopWhiteArea == null) {
+                prevTopWhiteArea = currTopWhiteArea;
+                prevBottomWhiteArea = currBottomWhiteArea;
+                prevLeftWhiteArea = currLeftWhiteArea;
+                prevRightWhiteArea = currRightWhiteArea;
                 console.log("no history");
             } else {
-                topDiff = currentTopWhiteArea - prevTopWhiteArea ;
-                bottomDiff = currentBottomWhiteArea - prevBottomWhiteArea;
+                topDiff = currTopWhiteArea - prevTopWhiteArea;
+                bottomDiff = currBottomWhiteArea - prevBottomWhiteArea;
+                leftDiff = currLeftWhiteArea - prevLeftWhiteArea;
+                rightDiff = currRightWhiteArea - prevRightWhiteArea;
 
-                if (topDiff > 0 && bottomDiff < 0 ) {
-                    console.log("scrolling up");
-                }else
-                if (topDiff < 0 && bottomDiff > 0) {
-                    console.log("scrolling down");
+                if (fastAbs(topDiff) > noiseThreshold || fastAbs(bottomDiff) > noiseThreshold) {
+                    if (topDiff > 0 && bottomDiff < 0) {
+                        console.log("scrolling up");
+                    } else if (topDiff < 0 && bottomDiff > 0) {
+                        console.log("scrolling down");
+                    }
                 }
 
+                if (fastAbs(leftDiff) > noiseThreshold || fastAbs(rightDiff) > noiseThreshold) {
+                    if (leftDiff > 0 && rightDiff < 0) {
+                        console.log("scrolling left");
+                    } else if (leftDiff < 0 && rightDiff > 0) {
+                        console.log("scrolling right");
+                    }
+                }
             }
-            prevTopWhiteArea = currentTopWhiteArea;
-            prevBottomWhiteArea = currentBottomWhiteArea;
+            prevTopWhiteArea = currTopWhiteArea;
+            prevBottomWhiteArea = currBottomWhiteArea;
+            prevLeftWhiteArea = currLeftWhiteArea;
+            prevRightWhiteArea = currRightWhiteArea;
         }
 
         function update() {
             drawVideo();
             blend();
             checkAreas();
-            setTimeout(update, 1000/6);
+            setTimeout(update, 1000/samplingFactor);
         }
 
         update();

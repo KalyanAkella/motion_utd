@@ -25,7 +25,7 @@ function motion_gestures() {
             '<div id="motion-gestures">' +
                 '<video id="webcam" autoplay width="640" height="480" style="display:none;"></video>' +
                 '<canvas id="canvas-source" width="640" height="480" style="display:none;"></canvas>' +
-                '<canvas id="canvas-blended" width="200" height="200"></canvas>' +
+                '<canvas id="canvas-blended" width="200" height="400"></canvas>' +
             '</div>'
         );
 
