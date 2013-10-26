@@ -8,7 +8,9 @@
             min-height: 600px;
         }
         button {
-            width: 100%;
+            width: 45%;
+            height: 30px;
+            float: left;
         }
     </style>
 
@@ -18,16 +20,19 @@
     <script src="../effects/control_browser.js"></script>
     <script src="extension.js"></script>
 
-    <!-- Detection JavaScript -->
-    <script src="../detection/gestures.js"></script>
-    <script src="../detection/motion_system.js"></script>
+    <!-- Gestures JavaScript -->
+    <script src="../detection/motion_gestures.js"></script>
     <script src="../detection/example_gestures.js"></script>
+
+    <!-- The Meat JavaScript -->
+    <script src="../detection/motion_system.js"></script>
 </head>
 <body>
     <button id="up">Up</button>
     <button id="down">Down</button>
     <button id="back">Back</button>
     <button id="forward">Forward</button>
+    <p id="state"></p>
     <video id="webcam" autoplay width="640" height="480"></video>
     <canvas id="canvas-source" width="640" height="480"></canvas>
     <canvas id="canvas-blended" width="200" height="200"></canvas>
