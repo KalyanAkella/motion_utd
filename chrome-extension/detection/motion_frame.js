@@ -1,5 +1,5 @@
-function MotionFrame(_topWhiteAre, _bottomWhiteArea, _leftWhiteArea, _rightWhiteArea) {
-  this.topWhiteArea = _topWhiteAre;
+function MotionFrame(_topWhiteArea, _bottomWhiteArea, _leftWhiteArea, _rightWhiteArea) {
+  this.topWhiteArea = _topWhiteArea;
   this.bottomWhiteArea = _bottomWhiteArea;
   this.leftWhiteArea = _leftWhiteArea;
   this.rightWhiteArea = _rightWhiteArea;
@@ -12,6 +12,6 @@ function MotionFrame(_topWhiteAre, _bottomWhiteArea, _leftWhiteArea, _rightWhite
     result.right = this.rightWhiteArea - anotherFrame.rightWhiteArea;
 
     return result;
-  }
+  };
 
 }

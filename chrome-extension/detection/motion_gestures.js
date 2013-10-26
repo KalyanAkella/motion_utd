@@ -1,12 +1,14 @@
 function motion_gestures() {
 
-    var lastImageData = null;
-    var prevFrame = null;
+    var lastImageDataVer = null;
+    var lastImageDataHor = null;
+    var prevVerFrame = null;
+    var prevHorFrame = null;
     var samplingFactor = 6;
     var noiseThreshold = 1000;
 
-    var video, canvasSource, canvasBlended;
-    var contextBlended, contextSource;
+    var video, canvasSource, canvasBlendedVer, canvasBlendedHor;
+    var contextBlendedVer, contextBlendedHor, contextSource;
     var left_callback, right_callback, up_callback, down_callback;
 
     function init() {
@@ -14,7 +16,8 @@ function motion_gestures() {
             '<div id="motion-gestures">' +
                 '<video id="webcam" autoplay width="640" height="480" style="display:none;"></video>' +
                 '<canvas id="canvas-source" width="640" height="480" style="display:none;"></canvas>' +
-                '<canvas id="canvas-blended" width="200" height="400"></canvas>' +
+                '<canvas id="canvas-blended-ver" width="200" height="280"></canvas>' +
+                '<canvas id="canvas-blended-hor" width="440" height="200"></canvas>' +
                 '<button id="hide-motion-gestures">Hide</button>' +
                 '</div>'
         );
@@ -24,14 +27,16 @@ function motion_gestures() {
 
         video = $('#webcam')[0];
         canvasSource = $("#canvas-source")[0];
-        canvasBlended = $("#canvas-blended")[0];
+        canvasBlendedVer = $("#canvas-blended-ver")[0];
+        canvasBlendedHor = $("#canvas-blended-hor")[0];
 
         navigator.webkitGetUserMedia({audio: false, video: true}, function(stream) {
             video.src = window.webkitURL.createObjectURL(stream);
             video.muted = 'muted';
         }, webcam_error);
 
-        contextBlended = canvasBlended.getContext('2d');
+        contextBlendedVer = canvasBlendedVer.getContext('2d');
+        contextBlendedHor = canvasBlendedHor.getContext('2d');
         contextSource = canvasSource.getContext('2d');
         contextSource.translate(canvasSource.width, 0);
         contextSource.scale(-1, 1);
@@ -45,21 +50,26 @@ function motion_gestures() {
             contextSource.drawImage(video, 0, 0, video.width, video.height);
         }
 
-        function blend() {
+        function verticalBlend() {
             var width = canvasSource.width;
             var height = canvasSource.height;
-            var sourceData = contextSource.getImageData(width - 200, 0, 200, 480);
-            if (!lastImageData) lastImageData = contextSource.getImageData(width - 200, 0, 200, 480);
-            var blendedData = contextSource.createImageData(200, 480);
-            differenceAccuracy(blendedData.data, sourceData.data, lastImageData.data);
-            contextBlended.putImageData(blendedData, 0, 0);
-            lastImageData = sourceData;
+            var sourceData = contextSource.getImageData(width - 200, 0, 200, height - 200);
+            if (!lastImageDataVer) lastImageDataVer = contextSource.getImageData(width - 200, 0, 200, height - 200);
+            var blendedData = contextSource.createImageData(200, height - 200);
+            differenceAccuracy(blendedData.data, sourceData.data, lastImageDataVer.data);
+            contextBlendedVer.putImageData(blendedData, 0, 0);
+            lastImageDataVer = sourceData;
+        }
 
-            contextBlended.strokeStyle = "#FF0000";
-            contextBlended.beginPath();
-            contextBlended.moveTo(0, 200);
-            contextBlended.lineTo(200, 200);
-            contextBlended.stroke();
+        function horizontalBlend() {
+            var width = canvasSource.width;
+            var height = canvasSource.height;
+            var sourceData = contextSource.getImageData(0, height - 200, width - 200, 200);
+            if (!lastImageDataHor) lastImageDataHor = contextSource.getImageData(0, height - 200, width - 200, 200);
+            var blendedData = contextSource.createImageData(width - 200, 200);
+            differenceAccuracy(blendedData.data, sourceData.data, lastImageDataHor.data);
+            contextBlendedHor.putImageData(blendedData, 0, 0);
+            lastImageDataHor = sourceData;
         }
 
         function fastAbs(value) {
@@ -95,27 +105,28 @@ function motion_gestures() {
             return whiteArea;
         }
 
-        function calcWhiteArea(x, y, width, height) {
-            var blendedImage = contextBlended.getImageData(x, y, width, height);
+        function calcVerticalWhiteArea(x, y, width, height) {
+            var blendedImage = contextBlendedVer.getImageData(x, y, width, height);
             return computeWhiteArea(blendedImage.data);
         }
 
-        function checkAreas() {
-            var width = canvasBlended.width;
-            var height = canvasBlended.height;
+        function calcHorizontalWhiteArea(x, y, width, height) {
+            var blendedImage = contextBlendedHor.getImageData(x, y, width, height);
+            return computeWhiteArea(blendedImage.data);
+        }
 
-            var currTopWhiteArea = calcWhiteArea(0, 0, width, height / 4);
-            var currBottomWhiteArea = calcWhiteArea(0, height / 4, width, height / 4);
-            var currLeftWhiteArea = calcWhiteArea(0, height / 2, width / 2, height / 2);
-            var currRightWhiteArea = calcWhiteArea(width / 2, height / 2, width / 2, height / 2);
+        function checkVerticalAreas() {
+            var width = canvasBlendedVer.width;
+            var height = canvasBlendedVer.height;
 
-            var currFrame = new MotionFrame(currTopWhiteArea, currBottomWhiteArea, currLeftWhiteArea, currRightWhiteArea);
+            var currTopWhiteArea = calcVerticalWhiteArea(0, 0, width, height / 2);
+            var currBottomWhiteArea = calcVerticalWhiteArea(0, height / 2, width, height / 2);
+            var currFrame = new MotionFrame(currTopWhiteArea, currBottomWhiteArea, 0, 0);
 
-
-            if (prevFrame == null) {
-                prevFrame = currFrame;
+            if (prevVerFrame == null) {
+                prevVerFrame = currFrame;
             } else {
-                var diffs = currFrame.difference(prevFrame);
+                var diffs = currFrame.difference(prevVerFrame);
 
                 if (fastAbs(diffs.top) > noiseThreshold || fastAbs(diffs.bottom) > noiseThreshold) {
                     if (diffs.top > 0 && diffs.bottom < 0) {
@@ -124,6 +135,22 @@ function motion_gestures() {
                         if(down_callback) down_callback();
                     }
                 }
+            }
+            prevVerFrame = currFrame;
+        }
+
+        function checkHorizontalAreas() {
+            var width = canvasBlendedHor.width;
+            var height = canvasBlendedHor.height;
+
+            var currLeftWhiteArea = calcHorizontalWhiteArea(0, 0, width / 2, height);
+            var currRightWhiteArea = calcHorizontalWhiteArea(width / 2, 0, width / 2, height);
+            var currFrame = new MotionFrame(0, 0, currLeftWhiteArea, currRightWhiteArea);
+
+            if (prevHorFrame == null) {
+                prevHorFrame = currFrame;
+            } else {
+                var diffs = currFrame.difference(prevHorFrame);
 
                 if (fastAbs(diffs.left) > noiseThreshold || fastAbs(diffs.right) > noiseThreshold) {
                     if (diffs.left > 0 && diffs.right < 0) {
@@ -133,13 +160,15 @@ function motion_gestures() {
                     }
                 }
             }
-            prevFrame = currFrame;
+            prevHorFrame = currFrame;
         }
 
         function update() {
             drawVideo();
-            blend();
-            checkAreas();
+            verticalBlend();
+            horizontalBlend();
+            checkVerticalAreas();
+            checkHorizontalAreas();
             setTimeout(update, 1000/samplingFactor);
         }
 
