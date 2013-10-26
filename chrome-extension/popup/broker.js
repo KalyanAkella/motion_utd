@@ -5,8 +5,8 @@ function broker(browser) {
 
         publisher.up(browser.scroll_up);
         publisher.down(browser.scroll_down);
-        publisher.left(browser.back);
-        publisher.right(browser.forward);
+        publisher.left(browser.scroll_left);
+        publisher.right(browser.scroll_right);
     }
 
     return {
