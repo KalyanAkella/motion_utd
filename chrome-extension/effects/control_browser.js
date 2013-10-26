@@ -1,24 +1,34 @@
 function control_browser() {
 
-    function back() {
-       // window.history.back();
+    var SPEED = 500;
+
+    function scroll_left() {
+        $('html, body').animate({
+            scrollLeft: '-=300'
+        }, SPEED);
     }
 
-    function forward() {
-      //  window.history.forward();
+    function scroll_right() {
+        $('html, body').animate({
+            scrollLeft: '+=300'
+        }, SPEED);
     }
 
     function scroll_up() {
-        window.scrollBy(0, -300);
+        $('html, body').animate({
+            scrollTop: '-=300'
+        }, SPEED);
     }
 
     function scroll_down() {
-        window.scrollBy(0, 300);
+        $('html, body').animate({
+            scrollTop: '+=300'
+        }, SPEED);
     }
 
     return {
-        back: back,
-        forward: forward,
+        scroll_left: scroll_left,
+        scroll_right: scroll_right,
         scroll_up: scroll_up,
         scroll_down: scroll_down
     }
