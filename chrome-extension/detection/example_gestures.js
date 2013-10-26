@@ -1,5 +1,16 @@
 function example_gestures() {
 
+    function init() {
+        $('body').append(
+            '<div id="motion-example-gestures">' +
+                '<button id="up">Up</button>' +
+                '<button id="down">Down</button>' +
+                '<button id="back">Back</button>' +
+                '<button id="forward">Forward</button>' +
+            '</div>'
+        );
+    }
+
     function left(callback) {
         $('#back').click(callback);
     }
@@ -21,6 +32,6 @@ function example_gestures() {
         right: right,
         up: up,
         down: down,
-        init: function() {}
+        init: init
     };
 }

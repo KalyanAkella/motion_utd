@@ -1,19 +1,19 @@
 function control_browser() {
 
     function back() {
-        chrome.tabs.executeScript(null, {code: "window.history.back();"});
+        window.history.back();
     }
 
     function forward() {
-        chrome.tabs.executeScript(null, {code: "window.history.forward();"});
+        window.history.forward();
     }
 
     function scroll_up() {
-        chrome.tabs.executeScript(null, {code: "window.scrollBy(0, -100);"});
+        window.scrollBy(0, -100);
     }
 
     function scroll_down() {
-        chrome.tabs.executeScript(null, {code: "window.scrollBy(0, 100);"});
+        window.scrollBy(0, 100);
     }
 
     return {
