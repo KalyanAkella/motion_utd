@@ -1,0 +1,13 @@
+{
+    "manifest_version": 2,
+
+    "name": "Motion United",
+    "description": "This extension allows for browser manipulation through motion detection.",
+    "version": "1.0",
+
+    "permissions": [],
+    "browser_action": {
+        "default_icon": "popup/icon.png",
+        "default_popup": "popup/index.html"
+    }
+}
