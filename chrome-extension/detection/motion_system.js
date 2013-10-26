@@ -16,12 +16,25 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
     var left_callback = function() { console.log("left"); };
     var right_callback = function() { console.log("right"); };
 
-    this.addCallbacks = function(up, down, left, right){
+    this.upCallbacks = function(up)
+    {
         up_callback = up;
+    };
+
+    this.downCallbacks = function(down)
+    {
         down_callback = down;
+    };
+
+    this.leftCallbacks = function(left)
+    {
         left_callback = left;
+    };
+
+    this.rightCallbacks = function(right)
+    {
         right_callback = right;
-    }
+    };
 
     this.start = function () {
         function drawVideo() {

@@ -1,19 +1,19 @@
 function control_browser() {
 
     function back() {
-        window.history.back();
+       // window.history.back();
     }
 
     function forward() {
-        window.history.forward();
+      //  window.history.forward();
     }
 
     function scroll_up() {
-        window.scrollBy(0, -100);
+        window.scrollBy(0, -300);
     }
 
     function scroll_down() {
-        window.scrollBy(0, 100);
+        window.scrollBy(0, 300);
     }
 
     return {

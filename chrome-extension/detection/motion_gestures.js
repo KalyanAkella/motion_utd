@@ -1,19 +1,22 @@
 function motion_gestures() {
 
-    function left(callback) {
+    var motionSystem;
 
+
+    function left(callback) {
+        motionSystem.leftCallbacks(callback);
     }
 
     function right(callback) {
-
+        motionSystem.rightCallbacks(callback);
     }
 
     function up(callback) {
-
+        motionSystem.upCallbacks(callback);
     }
 
     function down(callback) {
-
+        motionSystem.downCallbacks(callback);
     }
 
     function webcam_error(e) {
@@ -44,7 +47,8 @@ function motion_gestures() {
 
         var canvasSource = $("#canvas-source")[0];
         var canvasBlended = $("#canvas-blended")[0];
-        var motionSystem = new MotionSystem(video, canvasSource, canvasBlended);
+
+        motionSystem = new MotionSystem(video, canvasSource, canvasBlended);
         motionSystem.start();
     }
 
