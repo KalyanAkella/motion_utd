@@ -6,7 +6,7 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
   var contextBlended = canvasBlended.getContext('2d');
   var lastImageData = null;
   var prevTopWhiteArea, prevBottomWhiteArea, prevLeftWhiteArea, prevRightWhiteArea;
-  var freq = 1000/6;
+  var samplingFactor = 6;
   var noiseThreshold = 1000;
   contextSource.translate(canvasSource.width, 0);
   contextSource.scale(-1, 1);
@@ -93,7 +93,7 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
         leftDiff = currLeftWhiteArea - prevLeftWhiteArea;
         rightDiff = currRightWhiteArea - prevRightWhiteArea;
 
-        if (fastAbs(topDiff) > noiseThreshold && fastAbs(bottomDiff) > noiseThreshold) {
+        if (fastAbs(topDiff) > noiseThreshold || fastAbs(bottomDiff) > noiseThreshold) {
           if (topDiff > 0 && bottomDiff < 0) {
             console.log("scrolling up");
           } else if (topDiff < 0 && bottomDiff > 0) {
@@ -101,7 +101,7 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
           }
         }
 
-        if (fastAbs(leftDiff) > noiseThreshold && fastAbs(rightDiff) > noiseThreshold) {
+        if (fastAbs(leftDiff) > noiseThreshold || fastAbs(rightDiff) > noiseThreshold) {
           if (leftDiff > 0 && rightDiff < 0) {
             console.log("scrolling left");
           } else if (leftDiff < 0 && rightDiff > 0) {
@@ -119,7 +119,7 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
       drawVideo();
       blend();
       checkAreas();
-      setTimeout(update, freq);
+      setTimeout(update, 1000/samplingFactor);
     }
 
     update();
