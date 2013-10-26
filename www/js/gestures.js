@@ -5,7 +5,7 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
   var contextSource = canvasSource.getContext('2d');
   var contextBlended = canvasBlended.getContext('2d');
   var lastImageData = null;
-  var prevTopWhiteArea, prevBottomWhiteArea, prevLeftWhiteArea, prevRightWhiteArea;
+  var prevFrame = null;
   var samplingFactor = 6;
   var noiseThreshold = 1000;
   contextSource.translate(canvasSource.width, 0);
@@ -81,38 +81,31 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
       var currLeftWhiteArea = calcWhiteArea(0, height / 2, width / 2, height / 2);
       var currRightWhiteArea = calcWhiteArea(width / 2, height / 2, width / 2, height / 2);
 
-      if (prevTopWhiteArea == null) {
-        prevTopWhiteArea = currTopWhiteArea;
-        prevBottomWhiteArea = currBottomWhiteArea;
-        prevLeftWhiteArea = currLeftWhiteArea;
-        prevRightWhiteArea = currRightWhiteArea;
+      var currFrame = new MotionFrame(currTopWhiteArea, currBottomWhiteArea, currLeftWhiteArea, currRightWhiteArea);
+
+      if (prevFrame == null) {
+        prevFrame = currFrame;
         console.log("no history");
       } else {
-        topDiff = currTopWhiteArea - prevTopWhiteArea;
-        bottomDiff = currBottomWhiteArea - prevBottomWhiteArea;
-        leftDiff = currLeftWhiteArea - prevLeftWhiteArea;
-        rightDiff = currRightWhiteArea - prevRightWhiteArea;
+        var diffs = currFrame.difference(prevFrame);
 
-        if (fastAbs(topDiff) > noiseThreshold || fastAbs(bottomDiff) > noiseThreshold) {
-          if (topDiff > 0 && bottomDiff < 0) {
+        if (fastAbs(diffs.top) > noiseThreshold || fastAbs(diffs.bottom) > noiseThreshold) {
+          if (diffs.top > 0 && diffs.bottom < 0) {
             console.log("scrolling up");
-          } else if (topDiff < 0 && bottomDiff > 0) {
+          } else if (diffs.top < 0 && diffs.bottom > 0) {
             console.log("scrolling down");
           }
         }
 
-        if (fastAbs(leftDiff) > noiseThreshold || fastAbs(rightDiff) > noiseThreshold) {
-          if (leftDiff > 0 && rightDiff < 0) {
+        if (fastAbs(diffs.left) > noiseThreshold || fastAbs(diffs.right) > noiseThreshold) {
+          if (diffs.left > 0 && diffs.right < 0) {
             console.log("scrolling left");
-          } else if (leftDiff < 0 && rightDiff > 0) {
+          } else if (diffs.left < 0 && diffs.right > 0) {
             console.log("scrolling right");
           }
         }
       }
-      prevTopWhiteArea = currTopWhiteArea;
-      prevBottomWhiteArea = currBottomWhiteArea;
-      prevLeftWhiteArea = currLeftWhiteArea;
-      prevRightWhiteArea = currRightWhiteArea;
+      prevFrame = currFrame;
     }
 
     function update() {
