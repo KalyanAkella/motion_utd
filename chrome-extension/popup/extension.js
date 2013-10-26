@@ -1,21 +1,13 @@
-function extension(gestures) {
+function extension(gestures, browser) {
 
     function init() {
-        gestures.up(function() {
-            chrome.tabs.executeScript(null, {code: "window.scrollBy(0, -100);"});
-        });
+        gestures.up(browser.scroll_up);
 
-        gestures.down(function() {
-            chrome.tabs.executeScript(null, {code: "window.scrollBy(0, 100);"});
-        });
+        gestures.down(browser.scroll_down);
 
-        gestures.left(function() {
-            chrome.tabs.executeScript(null, {code: "window.history.back();"});
-        });
+        gestures.left(browser.back);
 
-        gestures.right(function() {
-            chrome.tabs.executeScript(null, {code: "window.history.forward();"});
-        });
+        gestures.right(browser.forward);
     }
 
     return {
@@ -24,6 +16,7 @@ function extension(gestures) {
 }
 
 $(function(){
+    var browser = control_browser();
     var gestures = example_gestures();
-    extension(gestures).init();
+    extension(gestures, browser).init();
 });
