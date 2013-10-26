@@ -68,6 +68,8 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
     }
 
     function checkAreas() {
+      var width = canvasBlended.width;
+      var height = canvasBlended.height;
       var currentTopWhiteArea = calcWhiteArea(0, 0 , canvasBlended.width, canvasBlended.height / 2);
       var currentBottomWhiteArea = calcWhiteArea(0, height / 2, width, height / 2);
 
@@ -76,14 +78,16 @@ function MotionSystem(_video, _canvasSource, _canvasBlended) {
         prevBottomWhiteArea = currentBottomWhiteArea;
         console.log("no history");
       } else {
-        if (prevTopWhiteArea < currentTopWhiteArea &&
-          prevBottomWhiteArea > currentBottomWhiteArea) {
-          console.log("scrolling down");
-        } else if (prevTopWhiteArea > currentTopWhiteArea &&
-          prevBottomWhiteArea < currentBottomWhiteArea) {
-          console.log("scrolling up");
+        topDiff = currentTopWhiteArea - prevTopWhiteArea ;
+        bottomDiff = currentBottomWhiteArea - prevBottomWhiteArea;
 
+        if (topDiff > 0 && bottomDiff < 0 ) {
+          console.log("scrolling up");
+        }else
+        if (topDiff < 0 && bottomDiff > 0) {
+          console.log("scrolling down");
         }
+
       }
       prevTopWhiteArea = currentTopWhiteArea;
       prevBottomWhiteArea = currentBottomWhiteArea;
