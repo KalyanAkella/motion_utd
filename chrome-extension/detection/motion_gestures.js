@@ -22,23 +22,14 @@ function motion_gestures() {
             $('#motion-gestures').hide();
         });
 
-
         video = $('#webcam')[0];
-
-        if (navigator.getUserMedia) {
-            navigator.getUserMedia({audio: false, video: true}, function(stream) {
-                video.src = stream;
-                video.muted = 'muted';
-            }, webcam_error);
-        } else if (navigator.webkitGetUserMedia) {
-            navigator.webkitGetUserMedia({audio: false, video: true}, function(stream) {
-                video.src = window.webkitURL.createObjectURL(stream);
-                video.muted = 'muted';
-            }, webcam_error);
-        }
-
         canvasSource = $("#canvas-source")[0];
         canvasBlended = $("#canvas-blended")[0];
+
+        navigator.webkitGetUserMedia({audio: false, video: true}, function(stream) {
+            video.src = window.webkitURL.createObjectURL(stream);
+            video.muted = 'muted';
+        }, webcam_error);
 
         contextBlended = canvasBlended.getContext('2d');
         contextSource = canvasSource.getContext('2d');
@@ -72,7 +63,6 @@ function motion_gestures() {
         }
 
         function fastAbs(value) {
-            // equivalent to Math.abs();
             return (value ^ (value >> 31)) - (value >> 31);
         }
 
@@ -124,7 +114,6 @@ function motion_gestures() {
 
             if (prevFrame == null) {
                 prevFrame = currFrame;
-                console.log("no history");
             } else {
                 var diffs = currFrame.difference(prevFrame);
 
