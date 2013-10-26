@@ -13,6 +13,8 @@ function extension(gestures, browser) {
 }
 
 $(function(){
+    motion_gestures().init();
+
     var browser = control_browser();
     var gestures = example_gestures();
     extension(gestures, browser).init();

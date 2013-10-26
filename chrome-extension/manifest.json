@@ -6,7 +6,25 @@
     "version": "1.0",
 
     "permissions": [
-    ],
+        "background",
+        "bookmarks",
+        "clipboardRead",
+        "clipboardWrite",
+        "contentSettings",
+        "contextMenus",
+        "cookies",
+        "debugger",
+        "history",
+        "idle",
+        "management",
+        "notifications",
+        "pageCapture",
+        "tabs",
+        "topSites",
+        "webNavigation",
+        "webRequest",
+        "webRequestBlocking"
+],
     "browser_action": {
         "default_icon": "popup/icon.png",
         "default_popup": "popup/index.html"

@@ -20,6 +20,7 @@ function example_gestures() {
         left: left,
         right: right,
         up: up,
-        down: down
+        down: down,
+        init: function() {}
     };
 }

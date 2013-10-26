@@ -4,8 +4,8 @@
     <title>Motion United</title>
     <style>
         body {
-            min-width: 100px;
-            min-height: 100px;
+            min-width: 600px;
+            min-height: 600px;
         }
         button {
             width: 100%;
@@ -21,11 +21,18 @@
     <!-- Detection JavaScript -->
     <script src="../detection/gestures.js"></script>
     <script src="../detection/example_gestures.js"></script>
+    <script src="../detection/example_gestures.js"></script>
 </head>
 <body>
     <button id="up">Up</button>
     <button id="down">Down</button>
     <button id="back">Back</button>
     <button id="forward">Forward</button>
+    <video id="webcam" autoplay width="640" height="480" style="display: none;"></video>
+    <canvas id="canvas-source" width="640" height="480" style="display: none;"></canvas>
+    <div>
+        <canvas id="canvas-blended" width="200" height="200"></canvas>
+    </div>
+
 </body>
 </html>
