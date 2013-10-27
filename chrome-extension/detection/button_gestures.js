@@ -5,8 +5,8 @@ function button_gestures() {
             '<div id="motion-example-gestures">' +
                 '<button id="up">Up</button>' +
                 '<button id="down">Down</button>' +
-                '<button id="back">Back</button>' +
-                '<button id="forward">Forward</button>' +
+                '<button id="left">Left</button>' +
+                '<button id="right">Right</button>' +
                 '<button id="hide-motion-example">Hide</button>' +
 
       '</div>'
@@ -17,11 +17,11 @@ function button_gestures() {
     }
 
     function left(callback) {
-        $('#back').click(callback);
+        $('#left').click(callback);
     }
 
     function right(callback) {
-        $('#forward').click(callback);
+        $('#right').click(callback);
     }
 
     function up(callback) {

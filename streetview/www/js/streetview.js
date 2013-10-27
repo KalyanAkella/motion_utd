@@ -18,15 +18,27 @@ function control_streetview() {
     }
 
     function up() {
-      var currentPov = panorama.getPov();
-      currentPov.pitch += ANGLE;
-      panorama.setPov(currentPov);
+      setPanoByHeading(panorama.getPov().heading);
     }
 
     function down() {
-      var currentPov = panorama.getPov();
-      currentPov.pitch -= ANGLE;
-      panorama.setPov(currentPov);
+      setPanoByHeading((panorama.getPov().heading + 180) % 360);
+    }
+
+    function setPanoByHeading(currentHeading) {
+      var links = panorama.getLinks();
+      var targetLink = null;
+      var minDiff = 361;
+
+      for (var i=0; i<links.length; i++) {
+        var linkHeading = links[i].heading;
+        var diffHeading = Math.abs(currentHeading - linkHeading);
+        if (diffHeading < minDiff) {
+          minDiff = diffHeading;
+          targetLink = links[i];
+        }
+      }
+      panorama.setPano(targetLink.pano);
     }
 
     function init() {
