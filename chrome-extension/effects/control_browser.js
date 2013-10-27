@@ -1,28 +1,28 @@
 function control_browser() {
 
-    var SPEED = 500;
+    var SPEED = 400;
 
     function left() {
         $('html, body').animate({
-            scrollLeft: '-=300'
+            scrollLeft: '-=400'
         }, SPEED);
     }
 
     function right() {
         $('html, body').animate({
-            scrollLeft: '+=300'
+            scrollLeft: '+=400'
         }, SPEED);
     }
 
     function up() {
         $('html, body').animate({
-            scrollTop: '-=300'
+            scrollTop: '-=400'
         }, SPEED);
     }
 
     function down() {
         $('html, body').animate({
-            scrollTop: '+=300'
+            scrollTop: '+=400'
         }, SPEED);
     }
 

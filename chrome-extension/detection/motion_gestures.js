@@ -137,9 +137,9 @@ function motion_gestures() {
 
                 if (fastAbs(diffs.top) > noiseThreshold || fastAbs(diffs.bottom) > noiseThreshold) {
                     if (diffs.top > 0 && diffs.bottom < 0) {
-                        if(up_callback) up_callback();
+                        if(up_callback) raiseCallbacks(up_callback);
                     } else if (diffs.top < 0 && diffs.bottom > 0) {
-                        if(down_callback) down_callback();
+                        if(down_callback) raiseCallbacks(down_callback);
                     }
                 }
             }
@@ -168,6 +168,21 @@ function motion_gestures() {
                 }
             }
             prevHorFrame = currFrame;
+        }
+
+        var enabled = true;
+        var currentTimeout;
+        var previousCallback;
+        function raiseCallbacks(callback) {
+          if(enabled || (!enabled && previousCallback == callback)) {
+            previousCallback = callback;
+            enabled = false;
+            callback();
+            if(currentTimeout) clearTimeout(currentTimeout);
+            currentTimeout = setTimeout(function() {
+              enabled = true;
+            }, 2000);
+          }
         }
 
         function update() {
