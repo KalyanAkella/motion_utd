@@ -13,16 +13,23 @@ function motion_gestures() {
 
     function init() {
         $('body').append(
-            '<div id="motion-gestures">' +
-                '<video id="webcam" autoplay width="640" height="480" style="display:none;"></video>' +
-                '<canvas id="canvas-source" width="640" height="480" style="display:none;"></canvas>' +
+            '<video id="webcam" autoplay width="640" height="480" style="display:none;"></video>' +
+            '<canvas id="canvas-source" width="640" height="480" style="display:none;"></canvas>' +
+            '<div id="motion-gestures-ver">' +
                 '<canvas id="canvas-blended-ver" width="200" height="280"></canvas>' +
+                '<button id="hide-motion-gestures-ver">Hide</button>' +
+            '</div>' +
+            '<div id="motion-gestures-hor">' +
                 '<canvas id="canvas-blended-hor" width="440" height="200"></canvas>' +
-                '<button id="hide-motion-gestures">Hide</button>' +
-                '</div>'
+                '<button id="hide-motion-gestures-hor">Hide</button>' +
+            '</div>'
         );
-        $('#hide-motion-gestures').click(function(){
-            $('#motion-gestures').hide();
+        $('#hide-motion-gestures-ver').click(function(){
+            $('#motion-gestures-ver').hide();
+        });
+
+        $('#hide-motion-gestures-hor').click(function(){
+            $('#motion-gestures-hor').hide();
         });
 
         video = $('#webcam')[0];
