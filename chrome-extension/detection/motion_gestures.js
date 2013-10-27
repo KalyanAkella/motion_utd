@@ -4,7 +4,7 @@ function motion_gestures() {
     var lastImageDataHor = null;
     var prevVerFrame = null;
     var prevHorFrame = null;
-    var samplingFactor = 6;
+    var samplingFactor = 10;
     var noiseThreshold = 1000;
 
     var vertical_callback = raise_callback();
