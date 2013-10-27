@@ -17,11 +17,11 @@ function control_streetview() {
       panorama.setPov(currentPov);
     }
 
-    function up() {
+    function down() {
       setPanoByHeading(panorama.getPov().heading);
     }
 
-    function down() {
+    function up() {
       setPanoByHeading((panorama.getPov().heading + 180) % 360);
     }
 
