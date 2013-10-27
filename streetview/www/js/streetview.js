@@ -18,7 +18,7 @@ function control_streetview() {
     }
 
     function down() {
-      setPanoByHeading(panorama.getPov().heading);
+      setPanoByHeading(panorama.getPov().heading % 360);
     }
 
     function up() {

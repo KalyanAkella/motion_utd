@@ -227,7 +227,7 @@ function raise_callback() {
       if(currentTimeout) clearTimeout(currentTimeout);
       currentTimeout = setTimeout(function() {
         enabled = true;
-      }, 2000);
+      }, 3000);
     }
   }
 
