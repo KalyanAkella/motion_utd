@@ -38,7 +38,7 @@ function control_streetview() {
           targetLink = links[i];
         }
       }
-      panorama.setPano(targetLink.pano);
+      if (targetLink != null) panorama.setPano(targetLink.pano);
     }
 
     function init() {
