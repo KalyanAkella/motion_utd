@@ -138,7 +138,7 @@ function motion_gestures() {
             } else {
                 var diffs = currFrame.difference(prevVerFrame);
 
-                if (fastAbs(diffs.top) > noiseThreshold || fastAbs(diffs.bottom) > noiseThreshold) {
+                if (fastAbs(diffs.top) > noiseThreshold && fastAbs(diffs.bottom) > noiseThreshold) {
                     if (diffs.top > 0 && diffs.bottom < 0) {
                         if(up_callback) vertical_callback.execute(up_callback);
                     } else if (diffs.top < 0 && diffs.bottom > 0) {
@@ -162,7 +162,7 @@ function motion_gestures() {
             } else {
                 var diffs = currFrame.difference(prevHorFrame);
 
-                if (fastAbs(diffs.left) > noiseThreshold || fastAbs(diffs.right) > noiseThreshold) {
+                if (fastAbs(diffs.left) > noiseThreshold && fastAbs(diffs.right) > noiseThreshold) {
                     if (diffs.left > 0 && diffs.right < 0) {
                         if(left_callback) horizontal_callback.execute(left_callback);
                     } else if (diffs.left < 0 && diffs.right > 0) {

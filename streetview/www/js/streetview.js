@@ -3,7 +3,7 @@ function control_streetview() {
     var panorama;
     var astorPlace = new google.maps.LatLng(53.47655127448954, -2.254521449859567);
 
-    var ANGLE = 10;
+    var ANGLE = 20;
 
     function left() {
       var currentPov = panorama.getPov();
