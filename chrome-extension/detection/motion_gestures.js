@@ -173,21 +173,6 @@ function motion_gestures() {
             prevHorFrame = currFrame;
         }
 
-        var enabled = true;
-        var currentTimeout;
-        var previousCallback;
-        function raiseCallbacks(callback) {
-          if(enabled || (!enabled && previousCallback == callback)) {
-            previousCallback = callback;
-            enabled = false;
-            callback();
-            if(currentTimeout) clearTimeout(currentTimeout);
-            currentTimeout = setTimeout(function() {
-              enabled = true;
-            }, 2000);
-          }
-        }
-
         function update() {
             drawVideo();
             verticalBlend();
