@@ -7,6 +7,9 @@ function motion_gestures() {
     var samplingFactor = 6;
     var noiseThreshold = 1000;
 
+    var vertical_callback = raise_callback();
+    var horizontal_callback = raise_callback();
+
     var video, canvasSource, canvasBlendedVer, canvasBlendedHor;
     var contextBlendedVer, contextBlendedHor, contextSource;
     var left_callback, right_callback, up_callback, down_callback;
@@ -137,9 +140,9 @@ function motion_gestures() {
 
                 if (fastAbs(diffs.top) > noiseThreshold || fastAbs(diffs.bottom) > noiseThreshold) {
                     if (diffs.top > 0 && diffs.bottom < 0) {
-                        if(up_callback) raiseCallbacks(up_callback);
+                        if(up_callback) vertical_callback.execute(up_callback);
                     } else if (diffs.top < 0 && diffs.bottom > 0) {
-                        if(down_callback) raiseCallbacks(down_callback);
+                        if(down_callback) vertical_callback.execute(down_callback);
                     }
                 }
             }
@@ -161,9 +164,9 @@ function motion_gestures() {
 
                 if (fastAbs(diffs.left) > noiseThreshold || fastAbs(diffs.right) > noiseThreshold) {
                     if (diffs.left > 0 && diffs.right < 0) {
-                        if(left_callback) left_callback();
+                        if(left_callback) horizontal_callback.execute(left_callback);
                     } else if (diffs.left < 0 && diffs.right > 0) {
-                        if(right_callback) right_callback();
+                        if(right_callback) horizontal_callback.execute(right_callback);
                     }
                 }
             }
@@ -224,4 +227,27 @@ function motion_gestures() {
         down: down,
         init: init
     };
+}
+
+function raise_callback() {
+  var enabled = true;
+  var currentTimeout;
+  var previousCallback;
+
+  function execute(callback) {
+    if(enabled || (!enabled && previousCallback == callback)) {
+      previousCallback = callback;
+      enabled = false;
+      callback();
+      if(currentTimeout) clearTimeout(currentTimeout);
+      currentTimeout = setTimeout(function() {
+        enabled = true;
+      }, 2000);
+    }
+  }
+
+  return {
+    execute: execute
+  };
+
 }
