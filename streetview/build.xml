@@ -21,5 +21,7 @@
     <copy todir="${apache.public.dir}/js" overwrite="true">
       <fileset dir="${lib.js.dir}" includes="**/*"/>
     </copy>
+	<echo message="Launching localhost..."/>
+    <exec command="open http://localhost" failonerror="true"/>
   </target>
 </project>
