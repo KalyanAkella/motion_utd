@@ -63,10 +63,13 @@ function motion_gestures() {
         function verticalBlend() {
             var width = canvasSource.width;
             var height = canvasSource.height;
-            var sourceData = contextSource.getImageData(width - 200, 0, 200, height - 200);
-            if (!lastImageDataVer) lastImageDataVer = contextSource.getImageData(width - 200, 0, 200, height - 200);
-            var blendedData = contextSource.createImageData(200, height - 200);
-            differenceAccuracy(blendedData.data, sourceData.data, lastImageDataVer.data);
+            var dataWidth = 200;
+            var dataHeight = height - 200;
+            var sourceData = contextSource.getImageData(width - dataWidth, 0, dataWidth, dataHeight);
+            if (!lastImageDataVer) lastImageDataVer = contextSource.getImageData(width - dataWidth, 0, dataWidth, dataHeight);
+            var blendedData = contextSource.createImageData(dataWidth, dataHeight);
+            var lines = new Array(dataHeight);
+            differenceAccuracy(blendedData.data, sourceData.data, lastImageDataVer.data, lines, dataWidth);
             contextBlendedVer.putImageData(blendedData, 0, 0);
             lastImageDataVer = sourceData;
         }
@@ -75,7 +78,10 @@ function motion_gestures() {
             var width = canvasSource.width;
             var height = canvasSource.height;
             var sourceData = contextSource.getImageData(0, height - 200, width - 200, 200);
-            if (!lastImageDataHor) lastImageDataHor = contextSource.getImageData(0, height - 200, width - 200, 200);
+            if (!lastImageDataHor) {
+              console.log('setting last image data');
+              lastImageDataHor = contextSource.getImageData(0, height - 200, width - 200, 200);
+            }
             var blendedData = contextSource.createImageData(width - 200, 200);
             differenceAccuracy(blendedData.data, sourceData.data, lastImageDataHor.data);
             contextBlendedHor.putImageData(blendedData, 0, 0);
@@ -87,21 +93,49 @@ function motion_gestures() {
         }
 
         function threshold(value) {
-            return (value > 21) ? 0xFF : 0;
+            return (value > 73) ? 0xFF : 0;
         }
 
-        function differenceAccuracy(target, data1, data2) {
+        function differenceAccuracy(target, data1, data2, lines, width) {
             if (data1.length != data2.length) return null;
             var i = 0;
+            var lineWeight = 0;
+            var linePosition = 0;
+            var recentWeights = [0,0,0,0,0,0,0,0,0]
             while (i < (data1.length * 0.25)) {
                 var index = 4 * i++;
-                var average1 = (data1[index] + data1[index+1] + data1[index+2]) / 3;
-                var average2 = (data2[index] + data2[index+1] + data2[index+2]) / 3;
-                var diff = threshold(fastAbs(average1 - average2));
+                var average1 = (data1[index] + data1[index+1] + data1[index+2]);
+                var average2 = (data2[index] + data2[index+1] + data2[index+2]);
+                var raw_diff = fastAbs(average1 - average2);
+                var diff = threshold(raw_diff);
                 target[index] = diff;
                 target[index+1] = diff;
                 target[index+2] = diff;
                 target[index+3] = 255;
+                if (lines !== undefined) {
+                  if (diff === 0xFF) {
+                    linePosition += (i % width);
+                    lineWeight += 1;
+                  }
+                  if ((i % width) === (width - 1)) {
+                    var line = Math.floor(i/width) 
+                    recentWeights.push(lineWeight);
+                    if (lineWeight > 2) { 
+                      var pos = Math.floor(linePosition/lineWeight)
+                      lines[line] = pos;
+                      var centreDataIndex = 4 * (width * line + pos) 
+                      target[centreDataIndex] = 255;
+                      target[centreDataIndex + 1] = 0;
+                      target[centreDataIndex + 2] = 0;
+                      target[index+3] = 255;
+                    }
+                    else {
+                      lines[line] = -1
+                    }
+                    lineWeight = 0
+                    linePosition = 0
+                  }
+                }
             }
         }
 
