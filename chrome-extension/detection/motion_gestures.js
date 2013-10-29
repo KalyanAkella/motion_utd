@@ -96,12 +96,22 @@ function motion_gestures() {
             return (value > 73) ? 0xFF : 0;
         }
 
-        function differenceAccuracy(target, data1, data2, lines, width) {
+      function setDataPoint(width, line, pos, target) {
+        var dataIndex = 4 * (width * line + pos);
+        target[dataIndex] = 255;
+        target[dataIndex + 1] = 0;
+        target[dataIndex + 2] = 0;
+        target[dataIndex + 3] = 255;
+        return dataIndex;
+      }
+
+      function differenceAccuracy(target, data1, data2, lines, width) {
             if (data1.length != data2.length) return null;
             var i = 0;
             var lineWeight = 0;
             var linePosition = 0;
             var recentWeights = [0,0,0,0,0,0,0,0,0]
+            var needPoint = true;
             while (i < (data1.length * 0.25)) {
                 var index = 4 * i++;
                 var average1 = (data1[index] + data1[index+1] + data1[index+2]);
@@ -120,14 +130,20 @@ function motion_gestures() {
                   if ((i % width) === (width - 1)) {
                     var line = Math.floor(i/width) 
                     recentWeights.push(lineWeight);
-                    if (lineWeight > 2) { 
-                      var pos = Math.floor(linePosition/lineWeight)
+                    recentWeights.shift();
+                    var rollingWeight = 0;
+                    recentWeights.forEach(function(weight) {
+                      rollingWeight += weight;
+                    });
+                    if (needPoint && rollingWeight > 8) {
+                      var pos = Math.floor(linePosition/lineWeight);
                       lines[line] = pos;
-                      var centreDataIndex = 4 * (width * line + pos) 
-                      target[centreDataIndex] = 255;
-                      target[centreDataIndex + 1] = 0;
-                      target[centreDataIndex + 2] = 0;
-                      target[index+3] = 255;
+                      for (var x=-2; x<3; x++) {
+                        for (var y=-2; y<3; y++) {
+                          setDataPoint(width, line + y, pos + x, target);
+                        }
+                      }
+                      needPoint = false;
                     }
                     else {
                       lines[line] = -1
